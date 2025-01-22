@@ -1,527 +1,398 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include "AVLTree.h"
+#if 0
+int main() {
+	AVLTree mytree;
+	InitAVLTree(&mytree);
+	int n = 10;
+	for (int i = 0; i < n; ++i)
+	{
+		Insert(&mytree, i);
+	}
+	NiceInOrder(&mytree);
+	printf("\n");
+	return 0;
+}
+#include <stdio.h>
+#include "BinaryTree.h"
+
+void testBasicOperations(BinaryTree tree) {
+    printf("树的节点数: %d\n", GetSize(tree));
+    printf("树的深度: %d\n", GetDepth(tree));
+    printf("是否为空: %s\n", IsEmpty(tree) ? "是" : "否");
+}
+
+void testTraversals(BinaryTree tree) {
+
+    printf("前序遍历: ");
+    PreOrder(tree);
+    printf("\n");
+
+    printf("中序遍历: ");
+    InOrder(tree);
+    printf("\n");
+
+    printf("后序遍历: ");
+    LastOrder(tree);
+    printf("\n");
+
+    printf("层序遍历: ");
+    LevelOrder(tree);
+    printf("\n");
+}
+
+int main() {
+    BinaryTree tree;
+    InitBinaryTree(&tree);
+    printf("\n请输入：");
+    tree = CreateBinTree();
+    // 测试基本操作
+    testBasicOperations(tree);
+    // 测试各种遍历方式
+    testTraversals(tree);
+    DestroyBinaryTree(tree);
+    return 0;
+}
+
+#include <stdio.h>
+#include "MinimumSpanningTree.h"
+
+int main() {
+    int n, m;  // n为顶点数，m为边数
+    Edge edges[MAX_EDGES];
+
+    // 输入图的数据
+    inputGraphData(&n, &m, edges);
+
+    // 执行Kruskal算法
+    kruskal(n, m, edges);
+
+    return 0;
+}
+#include <stdio.h>
+#include "avl.h"
+
+int main() {
+	//建立平衡二叉树，进行创建、增加、删除操作
+	AVLNode* root = NULL;
+	root = insert(root, 10);
+	root = insert(root, 20);
+	root = insert(root, 30);
+	root = insert(root, 40);
+	root = insert(root, 50);
+	root = insert(root, 25);
+	root = insert(root, 35);
+	root = insert(root, 45);
+	root = insert(root, 55);
+	root = insert(root, 60);
+
+	printf("=== AVL树 ===\n");
+	printTree(root, 0);
+
+	printf("\n=== 中序遍历 ===\n");
+	inorderTraversal(root);
+
+	root = Delete(root, 30);
+	printf("\n\n=== 删除节点 30 ===\n");
+	printTree(root, 0);
+	return 0;
+}
+#include "school.h"
+#include <corecrt_malloc.h>
+
+int main() {
+    // 1. 创建学校组织树
+    SchoolTree* school = createSchoolTree();
+
+    // 2. 添加处级部门
+    DepartmentNode* academic = createDepartment("教务处", 25, 2);
+    DepartmentNode* student = createDepartment("学生处", 20, 2);
+    DepartmentNode* hr = createDepartment("人事处", 15, 2);
+    DepartmentNode* finance = createDepartment("财务处", 18, 2);
+    DepartmentNode* csCollege = createDepartment("信息学院", 120, 2);
+    DepartmentNode* mathCollege = createDepartment("数学学院", 80, 2);
+	DepartmentNode* tongjiCollege = createDepartment("统计学院", 80, 2);
+	DepartmentNode* jingjiCollege = createDepartment("经济学院", 80, 2);
+    addDepartment(school->root, academic);
+    addDepartment(school->root, student);
+    addDepartment(school->root, hr);
+    addDepartment(school->root, finance);
+    addDepartment(school->root, csCollege);
+    addDepartment(school->root, mathCollege);
+	addDepartment(school->root, tongjiCollege);
+	addDepartment(school->root, jingjiCollege);
+
+    // 3. 添加科级部门
+    // 教务处下属科室
+    addDepartment(academic, createDepartment("教学科", 8, 3));
+    addDepartment(academic, createDepartment("考务科", 6, 3));
+    addDepartment(academic, createDepartment("实践科", 5, 3));
+
+    // 学生处下属科室
+    addDepartment(student, createDepartment("学生管理科", 7, 3));
+    addDepartment(student, createDepartment("心理咨询科", 5, 3));
+
+    // 人事处下属科室
+    addDepartment(hr, createDepartment("人事科", 8, 3));
+    addDepartment(hr, createDepartment("工资科", 4, 3));
+
+    // 信息学院下属科室
+    addDepartment(csCollege, createDepartment("教务科", 6, 3));
+    addDepartment(csCollege, createDepartment("学工科", 5, 3));
+    addDepartment(csCollege, createDepartment("实验中心", 8, 3));
+
+    // 4. 统计和显示处级部门信息
+    printf("=== 处级部门统计 ===\n");
+    int count = 0;
+    countDepartmentsByLevel(school->root, 2, &count);
+    printf("处级部门总数：%d\n\n", count);
+
+    printf("处级部门列表：\n");
+    printDepartmentsByLevel(school->root, 2);
+    printf("\n");
+
+    // 5. 查询具体部门编制
+    const char* departments[] = { "教务处", "信息学院", "人事科", "实验中心" };
+    int num_departments = sizeof(departments) / sizeof(departments[0]);
+
+    printf("=== 部门编制查询 ===\n");
+    for (int i = 0; i < num_departments; i++) {
+        int staff = getStaffNumber(school->root, departments[i]);
+        if (staff != -1) {
+            printf("%s的编制人数：%d\n", departments[i], staff);
+        }
+        else {
+            printf("未找到部门：%s\n", departments[i]);
+        }
+    }
+
+    // 6. 测试科级部门统计
+    printf("\n=== 科级部门统计 ===\n");
+    count = 0;
+    countDepartmentsByLevel(school->root, 3, &count);
+    printf("科级部门总数：%d\n\n", count);
+
+    printf("科级部门列表：\n");
+    printDepartmentsByLevel(school->root, 3);
+
+    return 0;
+}
+
+#include<stdlib.h>
+#include<assert.h>
+#include<string.h>
+#include<time.h>
+#include<ctype.h>
+#include"SeqStack.h"
+#include<stdio.h>
+int main()
+{
+	SeqStack myStack;
+	InitStack(&myStack);
+	int n = 10;
+	for (int i = 0; i < n; ++i)
+	{
+		Push(&myStack, i);
+	}
+	PrintStack(&myStack);
+	int val;
+	while (!StackEmpty(&myStack))
+	{
+		Pop(&myStack, &val);
+		printf("val: %d\n", val);
+	}
+	//验证两栈共享一连续存储空间
+	InitStack2(&myStack);
+	for (int i = 0; i < n; ++i)
+	{
+		Push2(&myStack, i, 1);
+	}
+	for (int i = 0; i < n; ++i)
+	{
+		Push2(&myStack, i, 2);
+	}
+	PrintStack(&myStack);
+	for (int i = 0; i < n; ++i)
+	{
+		Pop(&myStack, &val);
+		printf("val: %d\n", val);
+	}
+	for (int i = 0; i < n; ++i)
+	{
+		Pop(&myStack, &val);
+		printf("val: %d\n", val);
+	}
+	DestroyStack2(&myStack);
+
+	DestroyStack(&myStack);
+	return 0;
+}
+#include"BinarySortTree.h"
+int main()
+{
+	BSTree mytree;
+	InitBSTree(&mytree);
+	int n = 10;
+	for (int i = 0; i < n; ++i)
+	{
+		Insert(&mytree, rand() % 100);
+	}
+	NiceInOrder(&mytree);
+	printf("\n");
+	return 0;
+}
+#include <stdio.h>
+#include "BinaryTree.h"
+//ABD##E##CF##G##
+int main(void)
+{
+	BinaryTree tree;
+	InitBinaryTree(&tree);
+	tree = CreateBinTree();
+	int num = GetSize(tree);
+	printf("num: %d\n", num);
+	int depth = GetDepth(tree);
+	printf("depth: %d\n", depth);
+	PreOrder(tree);
+	printf("\n");
+	InOrder(tree);
+	printf("\n");
+	LastOrder(tree);
+	printf("\n");
+	LevelOrder(tree);
+	printf("\n");
+	ClearBinaryTree(tree);
+	printf("%d",IsEmpty(tree));
+
+	NiceInOrder(tree);
+	printf("\n");
+	NicePreOrder(tree);
+	printf("\n");
+	NiceLastOrder(tree);
+	printf("\n");
+
+
+	return 0;
+}
+int main(void)
+{
+	BinaryTree mytree;
+	InitBinaryTree(&mytree);
+	mytree = CreateBinTree();
+	PreOrder(mytree);
+	printf("\n");
+	InOrder(mytree);
+	printf("\n");
+	LastOrder(mytree);
+	printf("\n");
+	return 0;
+}
+#include"SkipList.h"
+
+int main(void)
+{
+    SkipList mylist;
+    InitSkipList(&mylist);
+    int n = 10;
+    for (int i = 0; i < n; ++i)
+    {
+        InsertNode(&mylist,i);
+    }
+    SkipListNode* p = mylist.head->backward[0];
+    while (p != nullptr)
+    {
+        printf("%d ", p->key);
+        p = p->backward[0];
+    }
+    printf("\n");
+	PrintSkip(&mylist);
+    DestroySkipList(&mylist);
+    return 0;
+}
 #define _CRT_SECURE_NO_WARNINGS 
 #include<stdio.h>
-#include"MaxHeap.h"
-#if 0 
-int main()
+#include"SeqQueue.h"
+
+void PrintInt(const void* pval)
 {
-	MaxHeap mh;
-	InitMaxHeap(&mh);
-	int select = 0;
-	int val;
-	do
-	{
-		printf("********maxheap*********\n");
-		printf("* 1.push     2.getSize *\n");
-		printf("* 3.getCapa  4.GetTop  *\n");
-		printf("* 5.PopTop   0.quit    *\n");
-		printf("************************\n");
-		printf("input select \n");
-		scanf_s("%d", &select);
-		switch (select)
-		{
-		case 0: printf("quit main \n");
-			break;
-		case 1:
-			printf("input val: ");
-			scanf_s("%d", &val);
-			PushBack(&mh, val);
-			break;
-		case 2:
-			printf("heap element size: %d \n", GetSize(&mh));
-			break;
-		case 3:
-			printf("heap capa size: %d \n", GetCapa(&mh));
-			break;
-		case 4:
-			if (GetTop(&mh, &val))
-			{
-				printf("head top val : %d \n", val);
-			}
-			else
-			{
-				printf(" head empty \n");
-			}
-			break;
-		case 5:
-			if (PopTop(&mh, &val))
-			{
-				printf("head top val : %d \n", val);
-			}
-			else
-			{
-				printf(" head empty \n");
-			}
-			break;
-		default:
-			printf("input select error \n");
-			break;
-		}
-	} while (select != 0);
-	DestroyMaxHeap(&mh);
-	return 0;
+    printf("%d ", *(const int*)pval);
 }
-
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-#include<assert.h>
-#include<ctype.h>
-#include<iostream>
-#include<sstream>
-#include<string>
-#include<mutex>
-#include<condition_variable>
-#include<thread>
-using namespace std;
-
-void FilterDown(int* nums, const int start, const int end)
-{
-	assert(nums != NULL);
-	int pa = start, child = pa * 2 + 1;
-	int tmp = nums[pa];
-	while (child <= end)
-	{
-		if (child < end && nums[child] < nums[child + 1]) ++child;
-		if (nums[child] <= tmp) break;
-		nums[pa] = nums[child];
-		pa = child;
-		child = pa * 2 + 1;
-	}
-	nums[pa] = tmp;
-}
-void FilterUp(int* nums, const int start)
-{
-	assert(nums != NULL);
-	int child = start, pa = (child - 1) / 2;
-	int tmp = nums[child];
-	while (child > 0)
-	{
-		if (tmp <= nums[pa]) break;
-		nums[child] = nums[pa];
-		child = pa;
-		pa = (child - 1) / 2;
-	}
-	nums[child] = tmp;
-}
-
-
-#include"GenListStack.hpp"
-
-bool IsOperator(const char ch)
-{
-	bool res = false;
-	switch (ch)
-	{
-	case '+': case '-': case '*': case '/': case '%': case '(': case ')':
-		res = true;
-		break;
-	default:
-		break;
-	}
-	return res;
-}
-
-int InStackOp(const char cp)
-{
-	int py = 0;
-	switch (cp)
-	{
-	case '+': case '-': py = 3; break;
-	case '*': case '/': case '%': py = 5; break;
-	case '(': py = 1; break;
-	case ')': py = 6; break;
-	}
-	return py;
-}
-int OutStackOp(const char cp)
-{
-	int py = 0;
-	switch (cp)
-	{
-	case '+': case '-': py = 2; break;
-	case '*': case '/': case '%': py = 4; break;
-	case '(': py = 6; break;
-	case ')': py = 1; break;
-	}
-	return py;
-}
-//int Operator(const int leftval, const int rightval, const char op)
-double Operator(const double leftval, const double rightval, const char op)
-{
-	double ret = 0;
-	switch (op)
-	{
-	case '+': ret = leftval + rightval; break;
-	case '-': ret = leftval - rightval; break;
-	case '*': ret = leftval * rightval; break;
-	case '/':
-		if (0 == rightval)
-		{
-			printf(" div 0 \n");
-			exit(1);
-		}
-		ret = leftval / rightval;
-		break;
-	case '%': ret = (int)leftval % (int)rightval; break;
-	default:
-		printf("无法计算....");
-		exit(1);
-		break;
-	}
-	return ret;
-}
-
-void PostFix(const char* midstr, char* laststr)
-{		 // midstr =" 12.345  +   2.3     * 8.0 ";
-		 // laststr = "1222 23 80 + * ";
-	if (NULL == midstr || '\0' == *midstr) return;
-	GenListStack mys;
-	InitGenListStack(&mys, sizeof(char));
-	char cval = '\0';
-	Push(&mys, &cval);
-	char* s = laststr;
-
-	for (const char* p = midstr; *p != '\0'; ++p)
-	{
-		if (isspace(*p)) {}
-		else if (!IsOperator(*p))
-		{
-			int pointcount = 0;
-			while (isdigit(*p) || *p == '.')
-			{
-				*s++ = *p++;
-				if (*p == '.') pointcount += 1;
-			}
-			*s++ = ' ';
-			--p;
-			if (pointcount > 1)
-			{
-				fprintf(stderr, "double error \n");
-				exit(1);
-			}
-		}
-		else if (IsOperator(*p))
-		{
-			if (OutStackOp(*p) > InStackOp((GetTop(&mys, &cval), cval)))
-			{
-				Push(&mys, p);
-			}
-			else if (OutStackOp(*p) < InStackOp((GetTop(&mys, &cval), cval)))
-			{
-				Pop(&mys, &cval);
-				//printf("%c ", cval);
-				*s++ = cval;
-				*s++ = ' ';
-				--p;
-			}
-			else  if (*p == ')' && ((GetTop(&mys, &cval), cval) == '('))
-			{
-				Pop(&mys, &cval);
-			}
-		}
-	}
-	while (!StackEmpty(&mys) && (GetTop(&mys, &cval), cval) != '\0')
-	{
-		Pop(&mys, &cval);
-		//printf("%c ", cval);
-		*s++ = cval;
-		*s++ = ' ';
-	}
-	*s = '\0';/// 
-	DestroyGenListStack(&mys);
-}
-
-double LastExprValue(const char* laststr)
-{
-	// laststr ="12456354 23 80 * + "
-	double sum = 0, leftval = 0, rightval = 0;
-	if (NULL == laststr || '\0' == *laststr) return sum;
-	GenListStack mys;
-	//InitGenListStack(&mys, sizeof(int));
-	InitGenListStack(&mys, sizeof(double));
-	for (const char* p = laststr; *p != '\0'; ++p)
-	{
-		if (!IsOperator(*p) && *p != ' ')
-		{
-			//int val = atoi(p);
-			double val = atof(p);
-			Push(&mys, &val);
-			p = strchr(p, ' ');
-		}
-		else if (IsOperator(*p))
-		{
-			Pop(&mys, &rightval);
-			Pop(&mys, &leftval);
-			sum = Operator(leftval, rightval, *p);
-			Push(&mys, &sum);
-		}
-	}
-	Pop(&mys, &sum);
-	DestroyGenListStack(&mys);
-	return sum;
-}
-int run(const char* midstr)
-{
-	//const char *midstr = " 12.23+4.5*3.423";
-	if (NULL == midstr || '\0' == *midstr) return 0;
-
-	int len = strlen(midstr);
-	len *= 2;
-	char* laststr = (char*)malloc(sizeof(char) * len);
-	if (NULL == laststr) exit(1);
-	memset(laststr, 0, sizeof(char) * len);
-
-	PostFix(midstr, laststr);
-	// laststr ="112 23 80 + * \0";
-	printf("laststr : %s \n", laststr);
-	double x = LastExprValue(laststr);
-	printf("x : %lf \n", x);
-	free(laststr);
-	laststr = NULL;
-	return 0;
-}
-int main()
-{
-	const int n = 128;
-	char str[n] = { 0 };
-	do
-	{
-		fgets(str, n, stdin);
-		if (strcmp(str, "end") == 0) break;
-		printf("str: %s \n", str);
-		run(str);
-	} while (1);
-	return 0;
-}
-
-
-
-
-
-
-
-void PostFix(const char* midstr)
-{
-	if (NULL == midstr || '\0' == *midstr) return;
-	GenListStack mys;
-	InitGenListStack(&mys, sizeof(char));
-	char cval = '\0';
-	Push(&mys, &cval);
-	for (const char* p = midstr; *p != '\0'; ++p)
-	{
-		if (!IsOperator(*p))
-		{
-			printf("%c ", *p);
-		}
-		else
-		{
-			if (OutStackOp(*p) > InStackOp((GetTop(&mys, &cval), cval)))
-			{
-				Push(&mys, p);
-			}
-			else if (OutStackOp(*p) < InStackOp((GetTop(&mys, &cval), cval)))
-			{
-				Pop(&mys, &cval);
-				printf("%c ", cval);
-				--p;
-			}
-			else  if (*p == ')' && ((GetTop(&mys, &cval), cval) == '('))
-			{
-				Pop(&mys, &cval);
-			}
-		}
-	}
-	while (!StackEmpty(&mys) && (GetTop(&mys, &cval), cval) != '\0')
-	{
-		Pop(&mys, &cval);
-		printf("%c ", cval);
-	}
-	DestroyGenListStack(&mys);
-}
-void FilterDown(int* nums, const int start, const int end)
-{
-	assert(nums != NULL);
-	int pa = start, child = pa * 2 + 1;
-	int tmp = nums[pa];
-	while (child <= end)
-	{
-		if (child < end && nums[child] < nums[child + 1]) ++child;
-		if (nums[child] <= tmp) break;
-		nums[pa] = nums[child];
-		pa = child;
-		child = pa * 2 + 1;
-
-	}
-	nums[pa] = tmp;
-}
-void FilterUp(int* nums, const int start)
-{
-	assert(nums != NULL);
-	int child = start, pa = (child - 1) / 2;
-	int tmp = nums[child];
-	while (child > 0)
-	{
-		if (tmp <= nums[pa]) break;
-		nums[child] = nums[pa];
-		child = pa;
-		pa = (child - 1) / 2;
-	}
-	nums[child] = tmp;
-}
-int main()
-{
-	int ar[] = { 67,91,34,56,78,23,31,87 };
-	int n = sizeof(ar) / sizeof(ar[0]);
-	int pos = (n - 1 - 1) / 2;
-	while (pos >= 0)
-	{
-		FilterDown(ar, pos, n - 1);
-		pos--;
-	}
-	return 0;
-}
-
-
 
 int main()
 {
-	int month = 0;
-
-	const char* strmon[] = { "xx", "January","February","March","April","May","June","July","August","September","October","November ","December" };
-	scanf("%d", &month);                      //   0    1          2        3
-	if (month >= 1 && month <= 12)
-	{
-		printf("%s \n", strmon[month]);
-	}
-	else
-	{
-		printf("xxxxx ... \n");
-	}
-	return 0;
+    GenSeqQueue myq;
+    InitQueue(&myq, sizeof(int));
+    //测试队列
+    for (int i = 0; i < 5; ++i)
+    {
+        EnQueue(&myq, &i);
+    }
+    PrintQueue(&myq, PrintInt);
+    int val;
+	printf("\n");
+    while (!QueueEmpty(&myq))
+    {
+        DeQueue(&myq, &val);
+        printf("val: %d\n", val);
+    }
+    DestroyQueue(&myq);
+    return 0;
 }
 
-
-int main()
-{
-	int month = 0;
-	scanf("%d", &month);
-	switch (month)
-	{
-	case 1: printf(" \n"); break;
-	case 2: printf(" \n"); break;
-	case 3: printf(" \n"); break;
-	case 4: printf(" \n"); break;
-	case 5: printf(" \n"); break;
-	case 6: printf(" \n"); break;
-	case 7: printf(" \n"); break;
-	case 8: printf(" \n"); break;
-	case 9: printf(" \n"); break;
-	case 10: printf(" \n"); break;
-	case 11: printf(" \n"); break;
-	case 12: printf(" \n"); break;
-	default:
-		printf("xx");
-		break;
-
-	}
-
-}
-
-int add(int a, int b); //
-
-int add(int a, int b)
-{
-	return a + b;
-}
-int main()
-{
-	int x = 10, y = 20;
-	int z = add(x, y);
-	//z = add();
-	add;
-	return 0;
-}
-
-
-#include"SeqQueue.hpp"
-
-int main()
-{
-	GenSeqQueue myq;
-	InitQueue(&myq, sizeof(double));
-	double dx = 12.25;
-	for (int i = 0; i < 7; ++i)
-	{
-		EnQueue(&myq, &dx);
-		dx += 1;
-	}
-	for (int i = 0; i < 4; ++i)
-	{
-		double val = 0;
-		DeQueue(&myq, &val);
-		printf("val : %lf \n", val);
-	}
-	for (int i = 0; i < 4; ++i)
-	{
-		EnQueue(&myq, &dx);
-		dx += 1;
-	}
-
-	DestroyQueue(&myq);
-	return 0;
-
-}
-
-#include"GenListQueue.hpp"
-
-
-int main()
-{
-	GenListQueue myq;
-	InitGenListQueue(&myq, sizeof(double));
-	double dx = 12.25;
-	for (int i = 0; i < 13; ++i)
-	{
-		EnQueue(&myq, &dx);
-		dx += 1;
-	}
-	double val = 0;
-	while (!QueueEmpty(&myq))
-	{
-		DeQueue(&myq, &val);
-		printf("val = %lf \n", val);
-	}
-	DestroyGenListQueue(&myq);
-	return 0;
-
-}
-
-#include"Maze.hpp"
-int main()
-{
-	MazeType maze;
-	PosType start = { 1,1 }, end = { 8,8 };
-	InitMaze(maze);
-	PrintMaze(maze);
-	PathMaze(maze, start, end);
-	PrintMaze(maze);
-	return 0;
-}
-
-
-#include"GenListStack.hpp"
 #define STRLEN 128
-char ConVal(char val)
+bool Paren(const char* str)
 {
-	switch (val)
+	assert(str != NULL);
+	if (str[0] == '\0') return false;
+	GenListStack cst;
+	InitGenListStack(&cst, sizeof(char));
+	int i = 0;
+	while (str[i++] != '\0')
 	{
-	case '(': val = ')'; break;
-	case '[': val = ']'; break;
-	case '{': val = '}'; break;
+		char val = str[i];
+		switch (val)
+		{
+		case '(':
+		case '[':
+		case '{':
+			Push(&cst, &val);
+			break;
+		case ')':
+			char topval;
+			GetTop(&cst, &topval);
+			if (!StackEmpty(&cst) && topval == '(')
+			{
+				Pop(&cst, &val);
+				break;
+			}
+			else return false;
+		case ']':
+			char topval;
+			GetTop(&cst, &topval);
+			if (!StackEmpty(&cst) && val == '[')
+			{
+				Pop(&cst, &val);
+				break;
+			}
+			else return false;
+		case '}':
+			char val;
+			GetTop(&cst, &val);
+			if (!StackEmpty(&cst) && val == '{')
+			{
+				Pop(&cst, &val);
+				break;
+			}
+			else return false;
+		default:
+			break;
+		}
 	}
-	return val;
+	if (StackEmpty(&cst)) return true;
+	else return false;
 }
+#define STRLEN 128
 bool Paren(const char* str)
 {
 	bool res = false;
@@ -529,8 +400,6 @@ bool Paren(const char* str)
 	char val = '\0';
 	GenListStack cst;
 	InitGenListStack(&cst, sizeof(char));
-	//char ch = 'a';
-	//Push(&cst, &ch);
 	for (const char* p = str; *p != '\0'; ++p)
 	{
 		switch (*p)
@@ -538,8 +407,8 @@ bool Paren(const char* str)
 		case '(': case '[': case '{':
 			Push(&cst, p);
 			break;
-		case ')': case ']':	case '}':
-			if (StackEmpty(&cst) || (Pop(&cst, &val), ConVal(val) != *p))
+		case ')': case ']': case '}':
+			if (StackEmpty(&cst) || (Pop(&cst, &val), val != *p))
 			{
 				goto END;
 			}
@@ -559,10 +428,9 @@ END:
 int main()
 {
 	char buff[STRLEN] = { 0 };
-	//while (scanf("%s", buff), strcmp(buff, "end") != 0)
-	while (fgets(buff, STRLEN, stdin), strcmp(buff, "end") == 0)
+	while(fgets(buff,STRLEN,stdin),strcmp(buff,"end") == 0)
+	//while (scanf("%s", buff), strcmp(buff, "end") == 0)
 	{
-		printf("buff => %s \n", buff);
 		bool tag = Paren(buff);
 		if (tag)
 		{
@@ -576,14 +444,31 @@ int main()
 	return 0;
 }
 
+int main(void)
+{
+	char buff[STRLEN] = { 0 };
+	while (scanf("%s", buff), strcmp(buff, "end") != 0)
+	{
+		bool tag = Paren(buff);
+		if (tag)
+		{
+			printf("Yes");
+		}
+		else
+		{
+			printf("No");
+		}
+	}
+}
 
-#define BEGIN    1
-#define WORD_IN  2
+#define BEGIN 1
+#define WORD_IN 2
 #define WORD_OUT 3
+
 int GetWordNums(const char* str)
 {
 	if (NULL == str) return -1;
-	if ('\0' == *str) return 0;
+	if (*str == '\0') return 0;
 	const char* p = str;
 	int nums = 0;
 	int tag = BEGIN;
@@ -592,93 +477,77 @@ int GetWordNums(const char* str)
 		switch (tag)
 		{
 		case BEGIN:
-			if (isalpha(*p)) { tag = WORD_IN; }
-			else { tag = WORD_OUT; }
+			if (isalpha(*p))
+			{
+				tag = WORD_IN;
+			}
+			else
+			{
+				tag = WORD_OUT;
+			}
 			break;
+
 		case WORD_IN:
-			if (!isalpha(*p)) { tag = WORD_OUT; nums += 1; }
+			if (!isalpha(*p))
+			{
+				tag = WORD_OUT;
+				++nums;
+			}
 			break;
+
 		case WORD_OUT:
-			if (isalpha(*p)) { tag = WORD_IN; }
+			if (isalpha(*p))
+			{
+				tag = WORD_IN;
+			}
 			break;
 		}
 	}
-	return nums;
-
-
 }
-int main()
+int main(void)
 {
-	char str[] = { " Give you what we think isn't book-about the language" };
-
-	int num = GetWordNums(str);
-
-	printf("num: %d \n", num);
+	char str[] = "  hello  world  c++  ";
+	int nums = GetWordNums(str);
+	printf("nums: %d \n", nums);
 	return 0;
+
 }
-
-
-#define STRLEN 128
-
-// 0 1 2 3 4 5 6 7 8 9 A B C D E F G .... Z // 36 ;	
-
 
 bool GetConversion(unsigned int nums, int radix, char* buff)
 {
-	static const char dig[] = { "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
-	if (radix < 2 || radix> 36) return false;
+	if (radix < 2 || radix > 36) return false;
 	if (NULL == buff) return false;
-	GenListStack mys;
-	InitGenListStack(&mys, sizeof(char));
+	static char dig[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	GenListStack mylist;
+	InitGenListStack(&mylist, sizeof(char));
 	while (nums != 0)
 	{
 		int index = nums % radix;
-		Push(&mys, &dig[index]);
 		nums = nums / radix;
+		Push(&mylist, &dig[index]);
 	}
 	int i = 0;
 	char val;
-	while (!StackEmpty(&mys))
+	while (!StackEmpty(&mylist))
 	{
-		Pop(&mys, &val);
+		Pop(&mylist, &val);
 		buff[i++] = val;
 	}
 	buff[i] = '\0';
-	DestroyGenListStack(&mys);
+	DestroyGenListStack(&mylist);
 	return true;
-}
-int main()
-{
-	char buff[STRLEN] = { 0 };
-	unsigned int nums;
-	int r = 10;
-	scanf("%d", &nums);
-	scanf("%d", &r);
-	if (GetConversion(nums, r, buff))
-	{
-		printf("buff: %s \n", buff);
-	}
-	else
-	{
-		printf("error \n");
-	}
-	return 0;
 }
 
 int main()
 {
 	int n = 7;
-	double dx = 12.25;
+	int dx = 12.25;
 	GenListStack imys, dmys;
 	InitGenListStack(&imys, sizeof(int));
 	InitGenListStack(&dmys, sizeof(double));
 	for (int i = 0; i < n; ++i)
 	{
 		Push(&imys, &i);
-
-	}
-	for (int i = 0; i < n; ++i)
-	{
 		Push(&dmys, &dx);
 		dx += 1;
 	}

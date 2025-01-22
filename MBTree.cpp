@@ -1,7 +1,9 @@
 #include<stdlib.h>
 #include<string.h>
 #include<assert.h>
+#include<stdio.h>
 #include"MBTree.h"
+#include"SeqQueue.h"
 static BNode* Buynode()
 {
 	BNode* s = (BNode*)malloc(sizeof(BNode));
@@ -20,12 +22,12 @@ static  BNode* MakeRoot(ElemType val, BNode* leftsub, BNode* rightsub)
 	s->num = 1;
 	s->data[1] = val;
 	s->sub[0] = leftsub;
+	if (NULL != leftsub) leftsub->parent = s;
 	s->sub[1] = rightsub;
-	if (leftsub != NULL) leftsub->parent = s;
-	if (rightsub != NULL) rightsub->parent = s;
+	if (NULL != rightsub) rightsub->parent = s;
 	return s;
 }
-static void InsertElem(BNode* ptr, int pos, ElemType val, BNode* rightsub)
+static void InsertElem(BNode* ptr, int pos, ElemType  val, BNode* rightsub)
 {
 	for (int i = ptr->num; i > pos; --i)
 	{
@@ -34,45 +36,52 @@ static void InsertElem(BNode* ptr, int pos, ElemType val, BNode* rightsub)
 	}
 	ptr->data[pos + 1] = val;
 	ptr->sub[pos + 1] = rightsub;
-	if (rightsub != NULL) rightsub->parent = ptr;
-	ptr->num++;
-}
-ElemType MoveItem(BNode* ptr, int pos, BNode* rightbro)
-{
-	ElemType val = ptr->data[pos];
-	if (rightbro != NULL)
+	if (NULL != rightsub)// leaf brch;
 	{
-		rightbro->num = MINELEM;
-		for (int i = 1; i <= MINELEM; ++i)
+		rightsub->parent = ptr;
+	}
+	ptr->num += 1;
+}
+ElemType MoveItem(BNode* ptr, int pos, BNode* rigthbro);
+
+static ElemType MoveElem(BNode* ptr, int pos, BNode* rightbro)
+{
+	for (int i = 0, j = pos + 1; j <= ptr->num; ++i, ++j)
+	{
+		rightbro->data[i] = ptr->data[j];
+		rightbro->sub[i] = ptr->sub[j];
+		if (ptr->sub[j] != NULL)
 		{
-			rightbro->data[i] = ptr->data[i + MINELEM];
-			rightbro->sub[i] = ptr->sub[i + MINELEM];
-			if (rightbro->sub[i] != NULL)
-			{
-				rightbro->sub[i]->parent = rightbro;
-			}
+			ptr->sub[j]->parent = rightbro;
 		}
 	}
-	ptr->num = MINELEM;
-	return val;
+	rightbro->parent = ptr->parent;
+	ptr->num = rightbro->num = pos;
+	return rightbro->data[0];
 }
 static BNode* Splice(BNode* ptr)
 {
 	BNode* rightbro = Buynode();
-	ElemType val = MoveItem(ptr, MINELEM + 1, rightbro);
-	BNode* parent = ptr->parent;
-	if (parent == NULL)
+	ElemType val = MoveElem(ptr, MINELEM, rightbro);
+	if (ptr->parent == NULL)
 	{
 		return MakeRoot(val, ptr, rightbro);
 	}
-	int pos = parent->num;
-	while (pos > 0 && parent->sub[pos] != ptr) { --pos; }
-	InsertElem(parent, pos, val, rightbro);
-	if (parent->num > MAXELEM)
+	BNode* pa = ptr->parent;
+	int pos = pa->num;
+	pa->data[0] = val;
+
+	while (val.key < pa->data[pos].key) { --pos; }
+
+	InsertElem(pa, pos, val, rightbro);
+	if (pa->num > MAXELEM)
 	{
-		return Splice(parent);
+		return Splice(pa);
 	}
-	return NULL;
+	else
+	{
+		return NULL;
+	}
 }
 void InitBTree(BTree* ptree)
 {
@@ -141,13 +150,48 @@ bool Insert(BTree* ptree, ElemType val)
 			ptree->root = newroot;
 		}
 	}
+	ptree->cursize += 1;
 	return true;
 }
-bool Remove(BTree* ptree, KeyType key)
+void PrintLevel(const BTree* ptree)
 {
 	assert(ptree != NULL);
+	if (IsEmpty(ptree)) return;
+	GenSeqQueue myq;
+	int level = 1;
+	InitQueue(&myq, sizeof(BNode*));
+	EnQueue(&myq, &ptree->root);
+	while (!QueueEmpty(&myq))
+	{
+		printf("level : %d ", level++);
+		int n = QueueLength(&myq);
+		for (int i = 0; i < n; ++i)
+		{
+			BNode* ptr = NULL;
+			DeQueue(&myq, &ptr);
+			printf("num: %d ", ptr->num);
+			if (ptr->sub[0] != NULL)
+			{
+				EnQueue(&myq, &ptr->sub[0]);
+			}
+			for (int j = 1; j <= ptr->num; ++j)
+			{
+				if (ptr->sub[j] != NULL)
+				{
+					EnQueue(&myq, &ptr->sub[j]);
+				}
+				printf("%c ", ptr->data[j].key);
+			}
+			printf(" | ");
+		}
+		printf("\n");
+	}
+	printf("\n-----------------------------------------\n");
+	DestroyQueue(&myq);
 }
+bool Remove(BTree* ptree, KeyType key);
 void PrintInfo(const BTree* ptree)
 {
 	assert(ptree != NULL);
 }
+

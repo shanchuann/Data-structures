@@ -138,22 +138,21 @@
     <ClCompile Include="GenListStack.cpp" />
     <ClCompile Include="LinkStack.cpp" />
     <ClCompile Include="GenListQueue.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="main1.cpp" />
-    <ClCompile Include="main2.cpp" />
     <ClCompile Include="MaxHeap.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MBTree.cpp" />
-    <ClCompile Include="MinimumSpanningTree.cpp" />
     <ClCompile Include="My_LinkList.cpp" />
     <ClCompile Include="My_LinkList.h" />
     <ClCompile Include="NotHead.cpp" />
     <ClCompile Include="RBTree.cpp" />
-    <ClCompile Include="school.cpp" />
     <ClCompile Include="SeqList.cpp" />
     <ClCompile Include="SeqQueue.cpp" />
     <ClCompile Include="SeqStack.cpp" />
     <ClCompile Include="SkipList.cpp" />
+    <ClCompile Include="Test01.cpp" />
+    <ClCompile Include="Test02.cpp" />
+    <ClCompile Include="Test03.cpp" />
+    <ClCompile Include="Test04.cpp" />
     <ClCompile Include="表达式求值.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,10 +169,8 @@
     <ClInclude Include="MaxHeap.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="MBTree.h" />
-    <ClInclude Include="MinimumSpanningTree.h" />
     <ClInclude Include="NotHead.h" />
     <ClInclude Include="RBTree.h" />
-    <ClInclude Include="school.h" />
     <ClInclude Include="SeqList.h" />
     <ClInclude Include="SeqQueue.h" />
     <ClInclude Include="SeqStack.h" />

@@ -40,5 +40,5 @@ extern Result FindValue(const BTree* ptree, KeyType key);
 extern bool Insert(BTree* ptree, ElemType val);
 extern bool Remove(BTree* ptree, KeyType key);
 extern void PrintInfo(const BTree* ptree);
-
+extern void PrintLevel(const BTree* ptree);
 #endif 

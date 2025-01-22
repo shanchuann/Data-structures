@@ -21,9 +21,6 @@
     <ClCompile Include="My_LinkList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="NotHead.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
     <ClCompile Include="Maze.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="GenListQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -61,9 +55,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="表达式求值.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="main2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Bank.cpp">
@@ -81,19 +72,25 @@
     <ClCompile Include="AVLTree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="school.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="SeqList.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MinimumSpanningTree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="RBTree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MBTree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test01.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test02.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test03.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test04.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,16 +140,10 @@
     <ClInclude Include="BinarySortTree.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="school.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="AVLTree.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SeqList.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MinimumSpanningTree.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="RBTree.h">

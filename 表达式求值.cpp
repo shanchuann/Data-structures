@@ -186,8 +186,9 @@ double Operator(const double leftval, const double rightval, const char op)
 }
 
 void PostFix(const char* midstr, char* laststr)
-{		 // midstr =" 12345  +   23     * 80 ";
-   // laststr = "1222 23 80 + * ";
+{		 
+	// midstr =" 12345  +   23     * 80 ";
+    // laststr = "1222 23 80 + * ";
 	if (NULL == midstr || '\0' == *midstr) return;
 	GenListStack mys;
 	InitGenListStack(&mys, sizeof(char));
