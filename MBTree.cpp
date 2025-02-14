@@ -42,8 +42,6 @@ static void InsertElem(BNode* ptr, int pos, ElemType  val, BNode* rightsub)
 	}
 	ptr->num += 1;
 }
-ElemType MoveItem(BNode* ptr, int pos, BNode* rigthbro);
-
 static ElemType MoveElem(BNode* ptr, int pos, BNode* rightbro)
 {
 	for (int i = 0, j = pos + 1; j <= ptr->num; ++i, ++j)
@@ -189,7 +187,137 @@ void PrintLevel(const BTree* ptree)
 	printf("\n-----------------------------------------\n");
 	DestroyQueue(&myq);
 }
-bool Remove(BTree* ptree, KeyType key);
+static BNode* GetLeftSub(BNode* ptr)
+{
+	while (ptr != NULL && ptr->sub[ptr->num] != NULL) {
+		ptr = ptr->sub[ptr->num];
+	}
+	return ptr;
+}
+static BNode* GetRightSub(BNode* ptr)
+{
+	while (ptr != NULL && ptr->sub[0] != NULL) {
+		ptr = ptr->sub[0];
+	}
+	return ptr;
+}
+static void Del_Brch_Elem(BNode* ptr, int pos)
+{
+	for (int i = pos; i < ptr->num; ++i)
+	{
+		ptr->data[i] = ptr->data[i + 1];
+		ptr->sub[i] = ptr->sub[i + 1];
+	}
+	ptr->num -= 1;
+}
+static void Del_Leaf_Elem(BNode* ptr, int pos)
+{
+	for (int i = pos; i < ptr->num; ++i)
+	{
+		ptr->data[i] = ptr->data[i + 1];
+		ptr->sub[i] = ptr->sub[i + 1];
+	}
+	ptr->num -= 1;
+}
+static BNode* Adjust_Leaf(BNode* ptr)
+{
+	BNode* pa = ptr->parent;
+	int pos = pa->num;
+	while (ptr->num < MINELEM)
+	{
+		while (pos > 0 && pa->sub[pos] != ptr) { --pos; }
+		if (pos > 0 && pa->sub[pos - 1]->num > MINELEM)
+		{
+			BNode* leftbro = pa->sub[pos - 1];
+			InsertElem(ptr, 0, leftbro->data[leftbro->num], GetRightSub(leftbro));
+			pa->data[pos] = leftbro->data[leftbro->num];
+			Del_Brch_Elem(leftbro, leftbro->num);
+		}
+		else if (pos < pa->num && pa->sub[pos + 1]->num > MINELEM)
+		{
+			BNode* rightbro = pa->sub[pos + 1];
+			InsertElem(ptr, ptr->num, rightbro->data[1], GetLeftSub(rightbro));
+			pa->data[pos + 1] = rightbro->data[1];
+			Del_Brch_Elem(rightbro, 1);
+		}
+		else if (pos > 0)
+		{
+			BNode* leftbro = pa->sub[pos - 1];
+			ElemType val = MoveElem(leftbro, leftbro->num, ptr);
+			pa->data[pos] = val;
+			ptr = leftbro;
+		}
+		else if (pos < pa->num)
+		{
+			BNode* rightbro = pa->sub[pos + 1];
+			ElemType val = MoveElem(ptr, 1, rightbro);
+			pa->data[pos + 1] = val;
+		}
+		else
+		{
+			break;
+		}
+	}
+	if (pa->num < MINELEM)
+	{
+		return Adjust_Leaf(pa);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+bool Remove(BTree* ptree, KeyType key)
+{
+	if (NULL == ptree) return false;
+	Result res = FindValue(ptree, key);
+	if (!res.tag) return false;
+	BNode* ptr = res.pnode;
+	int pos = res.index;
+	BNode* leftsub = GetLeftSub(ptr->sub[pos - 1]);
+	BNode* rightsub = GetRightSub(ptr->sub[pos]);
+	if (leftsub != NULL && leftsub->num > MINELEM)
+	{
+		ptr->data[pos] = leftsub->data[leftsub->num];
+		ptr = leftsub;
+		pos = leftsub->num;
+	}
+	else if (rightsub != NULL && rightsub->num > MINELEM)
+	{
+		ptr->data[pos] = rightsub->data[1];
+		ptr = rightsub;
+		pos = 1;
+	}
+	else if (leftsub != NULL)
+	{
+		ptr->data[pos] = leftsub->data[leftsub->num];
+		ptr = leftsub;
+		pos = leftsub->num;
+
+	}
+	else if (rightsub != NULL)
+	{
+		ptr->data[pos] = rightsub->data[1];
+		ptr = rightsub;
+		pos = 1;
+	}
+	Del_Leaf_Elem(ptr, pos);
+	if (ptr->parent == NULL && ptr->num == 0)
+	{
+		Freenode(ptr);
+		ptree->root = NULL;
+	}
+	else if (ptr->parent != NULL && ptr->num < MINELEM)
+	{
+		BNode* newroot = Adjust_Leaf(ptr);
+		if (newroot != NULL)
+		{
+			ptree->root = newroot;
+		}
+	}
+	ptree->cursize -= 1;
+	return true;
+}
 void PrintInfo(const BTree* ptree)
 {
 	assert(ptree != NULL);
