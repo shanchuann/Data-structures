@@ -363,7 +363,15 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Test code files
-Test
+Test01.cpp
+Test02.cpp
+Test03.cpp
+Test04.cpp
+TULUN.sln
+TULUN.vcxproj
+TULUN.vcxproj.filters
+TULUN.vcxproj.user
 
 # Work files
-TULUN
+/TULUN
+/Debug
